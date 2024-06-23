@@ -1,6 +1,9 @@
 use chrono::{Local,Utc};
 use eframe::egui;
 use egui::RichText;
+use chrono_tz::Asia::Kolkata;
+use chrono_tz::Europe::Berlin;
+use chrono_tz::America::New_York;
 
 fn main() {
     let native_options = eframe::NativeOptions::default();
@@ -26,29 +29,53 @@ impl eframe::App for MyWorldClockApp {
         egui::CentralPanel::default().show(ctx, |ui: &mut egui::Ui| {
 
         // local time
-        let local_time = local_time();
-        ui.heading("Local time:");
+        let local_time = calculate_time("local");
+        ui.heading("SYD:");
         ui.heading(RichText::new(local_time));
-
         // UTC time
-        let utc_time = utc_time();
-        ui.heading("GMT time:");
+        let utc_time = calculate_time("utc");
+        ui.heading("GMT:");
         ui.heading(RichText::new(utc_time));
+        // BLR time
+        let blr_time = calculate_time("blr");
+        ui.heading("BLR:");
+        ui.heading(RichText::new(blr_time));
+        // ERD time
+        let erd_time = calculate_time("erd");
+        ui.heading("ERD:");
+        ui.heading(RichText::new(erd_time));
+        // MIA time
+        let erd_time = calculate_time("mia");
+        ui.heading("MIA:");
+        ui.heading(RichText::new(erd_time));
        });
    }
 }
 
 
-fn local_time() -> String {
-    // return local time
-    let local_time = Local::now();
-    let local_time_formatted = format!("{}", local_time.format("%H:%M:%S"));
-    local_time_formatted
-}
-
-fn utc_time() -> String {
-    // return local time
-    let utc_time = Utc::now();
-    let utc_time_formatted = format!("{}", utc_time.format("%H:%M:%S"));
-    utc_time_formatted
+fn calculate_time(location: &str) -> String {
+    // calculate time based on given location input
+    match location {
+        "local" => {
+            let local_time = Local::now();
+            local_time.format("%H:%M:%S").to_string()
+        },
+        "utc" => {
+            let utc_time = Utc::now();
+            utc_time.format("%H:%M:%S").to_string()
+        },
+        "blr" => {
+            let blr_time = Utc::now().with_timezone(&Kolkata);
+            blr_time.format("%H:%M:%S").to_string()
+        },
+        "erd" => {
+            let erd_time = Utc::now().with_timezone(&Berlin);
+            erd_time.format("%H:%M:%S").to_string()
+        },
+        "mia" => {
+            let mia_time = Utc::now().with_timezone(&New_York);
+            mia_time.format("%H:%M:%S").to_string()
+        },
+        _ => String::from("Invalid location"),
+    }
 }
