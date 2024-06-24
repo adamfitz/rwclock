@@ -1,6 +1,5 @@
 use chrono::{Local,Utc};
 use eframe::egui;
-use egui::RichText;
 use chrono_tz::Asia::Kolkata;
 use chrono_tz::Europe::Berlin;
 use chrono_tz::America::New_York;
@@ -30,24 +29,19 @@ impl eframe::App for MyWorldClockApp {
 
         // local time
         let local_time = calculate_time("local");
-        ui.heading("SYD:");
-        ui.heading(RichText::new(local_time));
-        // UTC time
+        ui.heading(format!("SYD:\t {local_time}"));
+        // UTC
         let utc_time = calculate_time("utc");
-        ui.heading("GMT:");
-        ui.heading(RichText::new(utc_time));
-        // BLR time
+        ui.heading(format!("UTC:\t {utc_time}"));
+        // BANGALORE
         let blr_time = calculate_time("blr");
-        ui.heading("BLR:");
-        ui.heading(RichText::new(blr_time));
-        // ERD time
+        ui.heading(format!("BLR:\t {blr_time}"));
+        // ERDING
         let erd_time = calculate_time("erd");
-        ui.heading("ERD:");
-        ui.heading(RichText::new(erd_time));
-        // MIA time
-        let erd_time = calculate_time("mia");
-        ui.heading("MIA:");
-        ui.heading(RichText::new(erd_time));
+        ui.heading(format!("ERD:\t {erd_time}"));
+        // MIAMI
+        let mia_time = calculate_time("mia");
+        ui.heading(format!("MIA:\t {mia_time}"));
        });
    }
 }
