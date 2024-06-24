@@ -5,7 +5,15 @@ use chrono_tz::Europe::Berlin;
 use chrono_tz::America::New_York;
 
 fn main() {
-    let native_options = eframe::NativeOptions::default();
+    let native_options = eframe::NativeOptions {
+        viewport: egui::ViewportBuilder::default()
+        .with_inner_size([170.0, 170.0])
+        .with_always_on_top()
+        .with_resizable(false)
+        .with_maximize_button(false)
+        .with_minimize_button(false),
+        ..Default::default()
+    };
     let _ = eframe::run_native("World clock", native_options, Box::new(|cc| Box::new(MyWorldClockApp::new(cc))));
 }
 
@@ -42,7 +50,7 @@ impl eframe::App for MyWorldClockApp {
         // MIAMI
         let mia_time = calculate_time("mia");
         ui.heading(format!("MIA:\t {mia_time}"));
-       });
+        });
    }
 }
 
