@@ -39,7 +39,6 @@ impl eframe::App for MyWorldClockApp {
         let central_panel_height = 180.0;
         let panel_height = central_panel_height * 0.2;
 
-
         TopBottomPanel::top("panel0")
             .resizable(false)
             .min_height(panel_height)
@@ -47,12 +46,9 @@ impl eframe::App for MyWorldClockApp {
             .show(ctx, |ui| {
             // local time
             let local_time = calculate_time("local");
-            ui.horizontal_centered(|ui| {
-                ui.vertical_centered(|ui|{
-                    ui.heading(format!("SYD:\t {local_time}"));
-                }
-                )
-        });
+            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
+                ui.heading(format!("SYD:\t {local_time}"));
+            });
         });
 
         TopBottomPanel::top("panel1")
@@ -62,14 +58,10 @@ impl eframe::App for MyWorldClockApp {
             .show(ctx, |ui| {
             // local time
             let utc_time = calculate_time("utc");
-            ui.vertical_centered(|ui| {
-                ui.horizontal_centered(|ui|{
-                    ui.heading(format!("UTC:\t {utc_time}"));
-                }
-                )
+            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
+                ui.heading(format!("UTC:\t {utc_time}"));
+            });
         });
-        });
-
 
         TopBottomPanel::top("panel2")
             .resizable(false)
@@ -78,9 +70,9 @@ impl eframe::App for MyWorldClockApp {
             .show(ctx, |ui| {
             // BANGALORE
             let blr_time = calculate_time("blr");
-            ui.vertical_centered(|ui| {
-            ui.heading(format!("BLR:\t {blr_time}"));
-        });
+            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
+                ui.heading(format!("BLR:\t {blr_time}"));
+            });
         });
 
         TopBottomPanel::top("panel3")
@@ -90,22 +82,23 @@ impl eframe::App for MyWorldClockApp {
             .show(ctx, |ui| {
             // ERDING
             let erd_time = calculate_time("erd");
-            ui.vertical_centered(|ui| {
-            ui.heading(format!("ERD:\t {erd_time}"));
-        });
+            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
+                ui.heading(format!("ERD:\t {erd_time}"));
+            });
         });
 
-        TopBottomPanel::top("panel5")
+        TopBottomPanel::top("panel4")
             .resizable(false)
             .min_height(panel_height)
             .max_height(panel_height)
             .show(ctx, |ui| {
             // MIAMI
-        let mia_time = calculate_time("mia");
-        ui.vertical_centered(|ui| {
-            ui.heading(format!("MIA:\t {mia_time}"));
+            let mia_time = calculate_time("mia");
+            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
+                ui.heading(format!("MIA:\t {mia_time}"));
+            });
         });
-        });
+
 
         egui::CentralPanel::default().show(ctx, |_ui: &mut egui::Ui| {
 
