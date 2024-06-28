@@ -1,3 +1,4 @@
+#![windows_subsystem = "windows"] // this is a crate attribute, it stops the terminal opening by default on windows
 use chrono::{Local,Utc};
 use eframe::egui::{self, Color32, Frame, TopBottomPanel, RichText};
 use chrono_tz::Asia::Kolkata;
