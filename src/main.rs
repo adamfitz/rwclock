@@ -1,6 +1,5 @@
 use chrono::{Local,Utc};
-use eframe::egui;
-use crate::egui::TopBottomPanel;
+use eframe::egui::{self, Color32, Frame, TopBottomPanel};
 use chrono_tz::Asia::Kolkata;
 use chrono_tz::Europe::Berlin;
 use chrono_tz::America::New_York;
@@ -36,18 +35,19 @@ impl eframe::App for MyWorldClockApp {
    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         ctx.request_repaint();
 
-        let central_panel_height = 180.0;
+        let central_panel_height = 200.0;
         let panel_height = central_panel_height * 0.2;
 
         TopBottomPanel::top("panel0")
             .resizable(false)
             .min_height(panel_height)
             .max_height(panel_height)
+            .frame(Frame::none().fill(Color32::LIGHT_BLUE))
             .show(ctx, |ui| {
             // local time
             let local_time = calculate_time("local");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.heading(format!("SYD:\t {local_time}"));
+                ui.heading(format!("LT: \t {local_time}"));
             });
         });
 
@@ -67,6 +67,7 @@ impl eframe::App for MyWorldClockApp {
             .resizable(false)
             .min_height(panel_height)
             .max_height(panel_height)
+            .frame(Frame::none().fill(Color32::RED))
             .show(ctx, |ui| {
             // BANGALORE
             let blr_time = calculate_time("blr");
@@ -79,6 +80,7 @@ impl eframe::App for MyWorldClockApp {
             .resizable(false)
             .min_height(panel_height)
             .max_height(panel_height)
+            .frame(Frame::none().fill(Color32::YELLOW))
             .show(ctx, |ui| {
             // ERDING
             let erd_time = calculate_time("erd");
@@ -91,6 +93,7 @@ impl eframe::App for MyWorldClockApp {
             .resizable(false)
             .min_height(panel_height)
             .max_height(panel_height)
+            .frame(Frame::none().fill(Color32::BLUE))
             .show(ctx, |ui| {
             // MIAMI
             let mia_time = calculate_time("mia");
@@ -100,7 +103,8 @@ impl eframe::App for MyWorldClockApp {
         });
 
 
-        egui::CentralPanel::default().show(ctx, |_ui: &mut egui::Ui| {
+        egui::CentralPanel::default()
+            .show(ctx, |_ui: &mut egui::Ui| {
 
     });
    }
