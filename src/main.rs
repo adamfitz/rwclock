@@ -1,5 +1,5 @@
 use chrono::{Local,Utc};
-use eframe::egui::{self, Color32, Frame, TopBottomPanel};
+use eframe::egui::{self, Color32, Frame, TopBottomPanel, RichText};
 use chrono_tz::Asia::Kolkata;
 use chrono_tz::Europe::Berlin;
 use chrono_tz::America::New_York;
@@ -47,7 +47,7 @@ impl eframe::App for MyWorldClockApp {
             // local time
             let local_time = calculate_time("local");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(format!("LT: \t {local_time}"));
+                ui.label(RichText::new(format!("LT: \t{local_time}")).strong());
             });
         });
 
@@ -59,7 +59,7 @@ impl eframe::App for MyWorldClockApp {
             // local time
             let utc_time = calculate_time("utc");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(format!("UTC:\t {utc_time}"));
+                ui.label(RichText::new(format!("UTC:\t{utc_time}")).strong());
             });
         });
 
@@ -72,7 +72,7 @@ impl eframe::App for MyWorldClockApp {
             // BANGALORE
             let blr_time = calculate_time("blr");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(format!("BLR:\t {blr_time}"));
+                ui.label(RichText::new(format!("BLR:\t{blr_time}")).strong());
             });
         });
 
@@ -85,7 +85,7 @@ impl eframe::App for MyWorldClockApp {
             // ERDING
             let erd_time = calculate_time("erd");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(format!("ERD:\t {erd_time}"));
+                ui.label(RichText::new(format!("ERD:\t{erd_time}")).strong());
             });
         });
 
@@ -98,7 +98,7 @@ impl eframe::App for MyWorldClockApp {
             // MIAMI
             let mia_time = calculate_time("mia");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(format!("MIA:\t {mia_time}"));
+                ui.label(RichText::new(format!("MIA:\t{mia_time}")).strong());
             });
         });
 
