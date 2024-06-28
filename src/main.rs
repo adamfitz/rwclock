@@ -7,14 +7,14 @@ use chrono_tz::America::New_York;
 fn main() {
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-        .with_inner_size([170.0, 200.0])
+        .with_inner_size([110.0, 120.0])
         .with_always_on_top()
         .with_resizable(false)
         .with_maximize_button(false)
         .with_minimize_button(false),
         ..Default::default()
     };
-    let _ = eframe::run_native("World clock", native_options, Box::new(|cc| Box::new(MyWorldClockApp::new(cc))));
+    let _ = eframe::run_native("RWC", native_options, Box::new(|cc| Box::new(MyWorldClockApp::new(cc))));
 }
 
 #[derive(Default)]
@@ -35,19 +35,19 @@ impl eframe::App for MyWorldClockApp {
    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         ctx.request_repaint();
 
-        let central_panel_height = 200.0;
+        let central_panel_height = 120.0;
         let panel_height = central_panel_height * 0.2;
 
         TopBottomPanel::top("panel0")
             .resizable(false)
             .min_height(panel_height)
             .max_height(panel_height)
-            .frame(Frame::none().fill(Color32::LIGHT_BLUE))
+            .frame(Frame::none().fill(Color32::LIGHT_GREEN))
             .show(ctx, |ui| {
             // local time
             let local_time = calculate_time("local");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.heading(format!("LT: \t {local_time}"));
+                ui.label(format!("LT: \t {local_time}"));
             });
         });
 
@@ -59,7 +59,7 @@ impl eframe::App for MyWorldClockApp {
             // local time
             let utc_time = calculate_time("utc");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.heading(format!("UTC:\t {utc_time}"));
+                ui.label(format!("UTC:\t {utc_time}"));
             });
         });
 
@@ -72,7 +72,7 @@ impl eframe::App for MyWorldClockApp {
             // BANGALORE
             let blr_time = calculate_time("blr");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.heading(format!("BLR:\t {blr_time}"));
+                ui.label(format!("BLR:\t {blr_time}"));
             });
         });
 
@@ -85,7 +85,7 @@ impl eframe::App for MyWorldClockApp {
             // ERDING
             let erd_time = calculate_time("erd");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.heading(format!("ERD:\t {erd_time}"));
+                ui.label(format!("ERD:\t {erd_time}"));
             });
         });
 
@@ -93,12 +93,12 @@ impl eframe::App for MyWorldClockApp {
             .resizable(false)
             .min_height(panel_height)
             .max_height(panel_height)
-            .frame(Frame::none().fill(Color32::BLUE))
+            .frame(Frame::none().fill(Color32::LIGHT_BLUE))
             .show(ctx, |ui| {
             // MIAMI
             let mia_time = calculate_time("mia");
             ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.heading(format!("MIA:\t {mia_time}"));
+                ui.label(format!("MIA:\t {mia_time}"));
             });
         });
 
