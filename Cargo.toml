@@ -2,13 +2,8 @@
 name = "rwclock"
 version = "0.1.0"
 edition = "2021"
-build = "src/build.rs"
 
 [dependencies]
 chrono = "0.4.38"
 chrono-tz = "0.9.0"
 eframe = "0.27.2"
-winresource = "0.1.17"
-
-[build-dependencies]
-winresource = "0.1"
