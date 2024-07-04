@@ -4,8 +4,46 @@ use eframe::egui::{self, Color32, Frame, TopBottomPanel, RichText};
 use chrono_tz::Asia::Kolkata;
 use chrono_tz::Europe::Berlin;
 use chrono_tz::America::New_York;
+use clap::{Parser, ValueEnum};
+
+#[derive(Parser)]
+#[command(name = "World Clock")]
+#[command(about = "An application to display world clock times", long_about = None)]
+struct Cli {
+	#[arg(value_enum, default_value = "default")]
+	layout: Layout,
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
+enum Layout {
+	Default,
+	Alternate,
+}
+
+// Implement the Default trait for the Layout enum
+impl Default for Layout {
+    fn default() -> Self {
+        Layout::Default
+    }
+}
+
+// Define the Alternate trait
+trait Alternate {
+    fn alternate() -> Self;
+}
+
+// Implement the Default trait for the Layout enum
+impl Alternate for Layout {
+    fn alternate() -> Self {
+        Layout::Alternate
+    }
+}
 
 fn main() {
+    let cli = Cli::parse();
+
+    let layout = cli.layout;
+
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
         .with_inner_size([110.0, 120.0])
@@ -15,14 +53,18 @@ fn main() {
         .with_minimize_button(false),
         ..Default::default()
     };
-    let _ = eframe::run_native("RWC", native_options, Box::new(|cc| Box::new(MyWorldClockApp::new(cc))));
+    
+    let _ = eframe::run_native("RWC", native_options, Box::new(move |cc| Box::new(MyWorldClockApp::new(cc, layout))));
 }
 
 #[derive(Default)]
-struct MyWorldClockApp {}
+struct MyWorldClockApp {
+    layout: Layout
+}
 
 impl MyWorldClockApp {
-    fn new(_cc: &eframe::CreationContext<'_>) -> Self {
+    fn new(_cc: &eframe::CreationContext<'_>, layout: Layout) -> Self {
+        Self { layout };
         // Customize egui here with cc.egui_ctx.set_fonts and cc.egui_ctx.set_visuals.
         // Restore app state using cc.storage (requires the "persistence" feature).
         // Use the cc.gl (a glow::Context) to create graphics shaders and buffers that you can use
@@ -39,7 +81,28 @@ impl eframe::App for MyWorldClockApp {
         let central_panel_height = 120.0;
         let panel_height = central_panel_height * 0.2;
 
-        TopBottomPanel::top("panel0")
+        match self.layout {
+			Layout::Default => {
+				// Define your default layout panels here
+				render_default_layout(ctx, panel_height);
+			}
+			Layout::Alternate => {
+				// Define an alternate layout here
+				render_alternate_layout(ctx, panel_height);
+			}
+		}
+        
+   }
+
+
+}
+
+
+
+fn render_default_layout(ctx: &egui::Context, panel_height: f32) {
+    // Default layout is stacked top to bottom
+
+    TopBottomPanel::top("panel0")
             .resizable(false)
             .min_height(panel_height)
             .max_height(panel_height)
@@ -108,9 +171,24 @@ impl eframe::App for MyWorldClockApp {
             .show(ctx, |_ui: &mut egui::Ui| {
 
     });
-   }
 }
 
+fn render_alternate_layout(ctx: &egui::Context, panel_height: f32) {
+	// Define an alternate layout
+	TopBottomPanel::top("panel0")
+		.resizable(false)
+		.min_height(panel_height)
+		.max_height(panel_height)
+		.frame(Frame::none().fill(Color32::LIGHT_GREEN))
+		.show(ctx, |ui| {
+			let local_time = calculate_time("local");
+			ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
+				ui.label(RichText::new(format!("Local Time: \t{local_time}")).strong());
+			});
+		});
+
+	// Define other panels for the alternate layout
+}
 
 
 fn calculate_time(location: &str) -> String {
