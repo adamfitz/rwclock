@@ -1,6 +1,6 @@
 #![windows_subsystem = "windows"] // this is a crate attribute, it stops the terminal opening by default on windows
 use chrono::{Local,Utc};
-use eframe::egui::{self, Color32, Frame, TopBottomPanel, RichText};
+use eframe::egui::{self, Color32, Frame, TopBottomPanel, SidePanel, RichText};
 use chrono_tz::Asia::Kolkata;
 use chrono_tz::Europe::Berlin;
 use chrono_tz::America::New_York;
@@ -44,14 +44,28 @@ fn main() {
 
     let layout = cli.layout;
 
-    let native_options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default()
-        .with_inner_size([110.0, 120.0])
-        .with_always_on_top()
-        .with_resizable(false)
-        .with_maximize_button(false)
-        .with_minimize_button(false),
-        ..Default::default()
+    let native_options = if layout == Layout::Default {
+        eframe::NativeOptions {
+            viewport: egui::ViewportBuilder::default()
+                .with_inner_size([110.0, 120.0])
+                .with_always_on_top()
+                .with_resizable(false)
+                .with_maximize_button(false)
+                .with_minimize_button(false),
+            ..Default::default()
+        }
+    } else if layout == Layout::Alternate {
+        eframe::NativeOptions {
+            viewport: egui::ViewportBuilder::default()
+                .with_inner_size([600.0, 120.0])
+                .with_always_on_top()
+                .with_resizable(false)
+                .with_maximize_button(false)
+                .with_minimize_button(false),
+            ..Default::default()
+        }
+    } else {
+        eframe::NativeOptions::default()
     };
     
     let _ = eframe::run_native("RWC", native_options, Box::new(move |cc| Box::new(MyWorldClockApp::new(cc, layout))));
@@ -78,17 +92,18 @@ impl eframe::App for MyWorldClockApp {
    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         ctx.request_repaint();
 
-        let central_panel_height = 120.0;
-        let panel_height = central_panel_height * 0.2;
-
         match self.layout {
 			Layout::Default => {
+                let central_panel_height = 120.0;
+                let panel_height = central_panel_height * 0.2;
 				// Define your default layout panels here
 				render_default_layout(ctx, panel_height);
 			}
 			Layout::Alternate => {
+                let central_width = 600.0;
+                let panel_width = 600.0;
 				// Define an alternate layout here
-				render_alternate_layout(ctx, panel_height);
+				render_alternate_layout(ctx, panel_width);
 			}
 		}
         
@@ -99,7 +114,7 @@ impl eframe::App for MyWorldClockApp {
 
 
 
-fn render_default_layout(ctx: &egui::Context, panel_height: f32) {
+fn render_alternate_layout(ctx: &egui::Context, panel_height: f32) {
     // Default layout is stacked top to bottom
 
     TopBottomPanel::top("panel0")
@@ -173,21 +188,36 @@ fn render_default_layout(ctx: &egui::Context, panel_height: f32) {
     });
 }
 
-fn render_alternate_layout(ctx: &egui::Context, panel_height: f32) {
-	// Define an alternate layout
-	TopBottomPanel::top("panel0")
-		.resizable(false)
-		.min_height(panel_height)
-		.max_height(panel_height)
-		.frame(Frame::none().fill(Color32::LIGHT_GREEN))
-		.show(ctx, |ui| {
-			let local_time = calculate_time("local");
-			ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-				ui.label(RichText::new(format!("Local Time: \t{local_time}")).strong());
-			});
-		});
+fn render_default_layout(ctx: &egui::Context, panel_width: f32) {
+	// Defines an alternate layout
 
-	// Define other panels for the alternate layout
+    SidePanel::left("panel0").resizable(false)
+        .min_width(panel_width)
+        .max_width(panel_width)
+        //.min_height(panel_height)
+        //.max_height(panel_height)
+        .frame(Frame::none().fill(Color32::LIGHT_GREEN))
+        .show(ctx, |ui| {
+            let local_time = calculate_time("local");
+            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
+                ui.label(RichText::new(format!("Local Time: \t{local_time}")).strong());
+            });
+        });
+
+    SidePanel::left("panel1").resizable(false)
+        .min_width(panel_width)
+        .max_width(panel_width)
+        .frame(Frame::none().fill(Color32::LIGHT_BLUE))
+        .show(ctx, |ui| {
+            let local_time = calculate_time("local");
+            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
+                ui.label(RichText::new(format!("Local Time: \t{local_time}")).strong());
+            });
+        });
+
+    egui::CentralPanel::default()
+        .show(ctx, |_ui: &mut egui::Ui| {});
+
 }
 
 
