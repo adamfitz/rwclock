@@ -4,47 +4,29 @@ use eframe::egui::{self, Color32, Frame, TopBottomPanel, SidePanel, RichText};
 use chrono_tz::Asia::Kolkata;
 use chrono_tz::Europe::Berlin;
 use chrono_tz::America::New_York;
-use clap::{Parser, ValueEnum};
+use clap:: Parser;
 
-#[derive(Parser)]
-#[command(name = "World Clock")]
-#[command(about = "An application to display world clock times", long_about = None)]
-struct Cli {
-	#[arg(value_enum, default_value = "default")]
-	layout: Layout,
+#[derive(Debug, Parser)]
+#[clap(author, version, about)]
+pub struct RwClockArgs {
+    /// Configure app layout: default or alternate
+    pub layout: String
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
-enum Layout {
-	Default,
-	Alternate,
-}
-
-// Implement the Default trait for the Layout enum
-impl Default for Layout {
+// Implementing Default for RwClockArgs
+impl Default for RwClockArgs {
     fn default() -> Self {
-        Layout::Default
-    }
-}
-
-// Define the Alternate trait
-trait Alternate {
-    fn alternate() -> Self;
-}
-
-// Implement the Default trait for the Layout enum
-impl Alternate for Layout {
-    fn alternate() -> Self {
-        Layout::Alternate
+        RwClockArgs {
+            layout: String::from("default")
+        }
     }
 }
 
 fn main() {
-    let cli = Cli::parse();
 
-    let layout = cli.layout;
+    let args = RwClockArgs::parse();
 
-    let native_options = if layout == Layout::Default {
+    let native_options = if args.layout == "default" {
         eframe::NativeOptions {
             viewport: egui::ViewportBuilder::default()
                 .with_inner_size([110.0, 120.0])
@@ -54,10 +36,10 @@ fn main() {
                 .with_minimize_button(false),
             ..Default::default()
         }
-    } else if layout == Layout::Alternate {
+    } else if args.layout == "alternate" {
         eframe::NativeOptions {
             viewport: egui::ViewportBuilder::default()
-                .with_inner_size([600.0, 120.0])
+                .with_inner_size([6000.0, 1000.0])
                 .with_always_on_top()
                 .with_resizable(false)
                 .with_maximize_button(false)
@@ -68,17 +50,17 @@ fn main() {
         eframe::NativeOptions::default()
     };
     
-    let _ = eframe::run_native("RWC", native_options, Box::new(move |cc| Box::new(MyWorldClockApp::new(cc, layout))));
+    let _ = eframe::run_native("RWC", native_options, Box::new(move |cc| Box::new(MyWorldClockApp::new(cc, args))));
 }
 
 #[derive(Default)]
 struct MyWorldClockApp {
-    layout: Layout
+    args: RwClockArgs
 }
 
 impl MyWorldClockApp {
-    fn new(_cc: &eframe::CreationContext<'_>, layout: Layout) -> Self {
-        Self { layout };
+    fn new(_cc: &eframe::CreationContext<'_>, args: RwClockArgs) -> Self {
+        Self { args };
         // Customize egui here with cc.egui_ctx.set_fonts and cc.egui_ctx.set_visuals.
         // Restore app state using cc.storage (requires the "persistence" feature).
         // Use the cc.gl (a glow::Context) to create graphics shaders and buffers that you can use
@@ -92,29 +74,27 @@ impl eframe::App for MyWorldClockApp {
    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         ctx.request_repaint();
 
-        match self.layout {
-			Layout::Default => {
+        match self.args.layout.as_str() {
+			"default" => {
                 let central_panel_height = 120.0;
                 let panel_height = central_panel_height * 0.2;
 				// Define your default layout panels here
 				render_default_layout(ctx, panel_height);
 			}
-			Layout::Alternate => {
-                let central_width = 600.0;
-                let panel_width = 600.0;
+			"alternate" => {
+                let _central_width = 600.0;
+                let panel_width = 6000.0;
 				// Define an alternate layout here
 				render_alternate_layout(ctx, panel_width);
 			}
+            &_ => todo!()
 		}
-        
    }
-
-
 }
 
 
 
-fn render_alternate_layout(ctx: &egui::Context, panel_height: f32) {
+fn render_default_layout(ctx: &egui::Context, panel_height: f32) {
     // Default layout is stacked top to bottom
 
     TopBottomPanel::top("panel0")
@@ -188,7 +168,7 @@ fn render_alternate_layout(ctx: &egui::Context, panel_height: f32) {
     });
 }
 
-fn render_default_layout(ctx: &egui::Context, panel_width: f32) {
+fn render_alternate_layout(ctx: &egui::Context, panel_width: f32) {
 	// Defines an alternate layout
 
     SidePanel::left("panel0").resizable(false)
