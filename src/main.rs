@@ -7,7 +7,7 @@ fn main() {
     let clock_width = 90.0;
     let num_clocks = 5;
     let window_width = (clock_width * num_clocks as f32) + 50 as f32; // adding 50 more pixels because the window layou is not working properly
-    let window_height = 40.0; // Height of a single clock panel
+    let window_height = 30.0; // Height of a single clock panel
 
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
@@ -18,7 +18,7 @@ fn main() {
             .with_minimize_button(false),
         ..Default::default()
     };
-    let _ = eframe::run_native("RWC", native_options, Box::new(|cc| Box::new(MyWorldClockApp::new(cc))));
+    let _ = eframe::run_native("World Clock", native_options, Box::new(|cc| Box::new(MyWorldClockApp::new(cc))));
 }
 
 #[derive(Default)]
@@ -75,83 +75,6 @@ impl eframe::App for MyWorldClockApp {
                 });
             });
     }
-   /* 
-   fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        ctx.request_repaint();
-
-        let central_panel_height = 120.0;
-        let panel_height = central_panel_height * 0.2;
-
-        TopBottomPanel::top("panel0")
-            .resizable(false)
-            .min_height(panel_height)
-            .max_height(panel_height)
-            .frame(Frame::none().fill(Color32::LIGHT_GREEN))
-            .show(ctx, |ui| {
-            // local time
-            let local_time = calculate_time("local");
-            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(RichText::new(format!("LT: \t{local_time}")).strong());
-            });
-        });
-
-        TopBottomPanel::top("panel1")
-            .resizable(false)
-            .min_height(panel_height)
-            .max_height(panel_height)
-            .show(ctx, |ui| {
-            // local time
-            let utc_time = calculate_time("utc");
-            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(RichText::new(format!("UTC:\t{utc_time}")).strong());
-            });
-        });
-
-        TopBottomPanel::top("panel2")
-            .resizable(false)
-            .min_height(panel_height)
-            .max_height(panel_height)
-            .frame(Frame::none().fill(Color32::RED))
-            .show(ctx, |ui| {
-            // BANGALORE
-            let blr_time = calculate_time("blr");
-            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(RichText::new(format!("BLR:\t{blr_time}")).strong());
-            });
-        });
-
-        TopBottomPanel::top("panel3")
-            .resizable(false)
-            .min_height(panel_height)
-            .max_height(panel_height)
-            .frame(Frame::none().fill(Color32::YELLOW))
-            .show(ctx, |ui| {
-            // ERDING
-            let erd_time = calculate_time("erd");
-            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(RichText::new(format!("ERD:\t{erd_time}")).strong());
-            });
-        });
-
-        TopBottomPanel::top("panel4")
-            .resizable(false)
-            .min_height(panel_height)
-            .max_height(panel_height)
-            .frame(Frame::none().fill(Color32::LIGHT_BLUE))
-            .show(ctx, |ui| {
-            // MIAMI
-            let mia_time = calculate_time("mia");
-            ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::TopDown), |ui| {
-                ui.label(RichText::new(format!("MIA:\t{mia_time}")).strong());
-            });
-        });
-
-
-        egui::CentralPanel::default()
-            .show(ctx, |_ui: &mut egui::Ui| {
-
-    );
-   }}*/
 }
 
 
