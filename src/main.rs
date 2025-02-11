@@ -1,6 +1,6 @@
 #![windows_subsystem = "windows"] // this is a crate attribute, it stops the terminal opening by default on windows
 use chrono::{Local,Utc};
-use eframe::egui::{self, Color32, Frame, TopBottomPanel, RichText};
+use eframe::egui::{self, Color32, RichText};
 use chrono_tz::Asia::Kolkata;
 use chrono_tz::Europe::Berlin;
 use chrono_tz::America::New_York;
@@ -32,7 +32,36 @@ impl MyWorldClockApp {
 }
 
 impl eframe::App for MyWorldClockApp {
-    
+
+    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        ctx.request_repaint();
+
+        egui::CentralPanel::default().show(ctx, |ui| {
+            ui.horizontal_centered(|ui| {
+                let clocks = vec![
+                    ("LT", calculate_time("local"), Color32::LIGHT_GREEN),
+                    ("UTC", calculate_time("utc"), Color32::WHITE),
+                    ("BLR", calculate_time("blr"), Color32::RED),
+                    ("ERD", calculate_time("erd"), Color32::YELLOW),
+                    ("MIA", calculate_time("mia"), Color32::LIGHT_BLUE),
+                ];
+
+                for (label, time, color) in clocks {
+                    ui.group(|ui| {
+                        ui.visuals_mut().override_text_color = Some(Color32::BLACK);
+                        ui.style_mut().visuals.widgets.noninteractive.bg_fill = color;
+                        ui.set_min_width(90.0); // Adjust width per clock
+
+                        ui.vertical_centered(|ui| {
+                            ui.label(RichText::new(format!("{}:", label)).strong());
+                            ui.label(RichText::new(time).strong());
+                        });
+                    });
+                }
+            });
+        });
+    }
+   /* 
    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         ctx.request_repaint();
 
@@ -107,8 +136,8 @@ impl eframe::App for MyWorldClockApp {
         egui::CentralPanel::default()
             .show(ctx, |_ui: &mut egui::Ui| {
 
-    });
-   }
+    );
+   }}*/
 }
 
 
