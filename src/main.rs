@@ -12,15 +12,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
     WM_NCLBUTTONDOWN, HTCAPTION,
 };
 
-/*  commenting out for debugging
 // Windows API to handle clicking anywhere on the window and dragging it
-fn handle_drag(native_window: HWND) {
-    unsafe {
-        SendMessageW(native_window, WM_NCLBUTTONDOWN, WPARAM(HTCAPTION as usize), LPARAM(0));
-    }
-}
-*/
-
 fn handle_drag(hwnd: HWND) {
     println!("Dragging window... {:?}", hwnd); // Debug output
     unsafe {
@@ -35,7 +27,7 @@ fn main() {
     let clock_width = 60.0;
     let num_clocks = 5;
     let window_width = (clock_width * num_clocks as f32) + 50.0;
-    let window_height = 40.0;
+    let window_height = 30.0;
 
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
@@ -68,7 +60,7 @@ impl eframe::App for MyWorldClockApp {
         let clock_height = 40.0;
         let clock_width = ctx.available_rect().width() / num_clocks as f32;
 
-        egui::CentralPanel::default().show(ctx, |ui| {
+        egui::CentralPanel::default().frame(egui::Frame::none()).show(ctx, |ui| {
             ui.spacing_mut().item_spacing = egui::vec2(0.0, 0.0);
             ui.horizontal(|ui| {
                 let clocks = vec![
