@@ -7,3 +7,6 @@ edition = "2021"
 chrono = "0.4.38"
 chrono-tz = "0.9.0"
 eframe = "0.27.2"
+egui = "0.27.2"   # Keep it in sync with eframe
+windows = { version = "0.52", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_UI_Input_KeyboardAndMouse"] }
+raw-window-handle = "0.6"
